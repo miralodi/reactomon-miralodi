@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { Card } from "react-bootstrap";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import PokemonDetail from "./PokemonDetail";
 
 export class Pokemon extends Component {
   state = {
@@ -22,8 +20,6 @@ export class Pokemon extends Component {
   }
 
   render() {
-    console.log(this.state.id);
-
     return (
       <span style={{ display: "inline-block", padding: "20px" }}>
         <Card style={{ width: "18rem" }}>
@@ -44,10 +40,6 @@ export class Pokemon extends Component {
 // PropTypes
 Pokemon.propTypes = {
   pokemon: PropTypes.object.isRequired
-};
-
-const pokemonStyle = {
-  backgroundColor: "#f4f4f4"
 };
 
 export default Pokemon;

@@ -27,7 +27,6 @@ class App extends Component {
         <div className="App">
           <div className="container">
             <Navbar />
-            {/* <PokemonList pokemons={this.state.pokemons} /> */}
             <Route
               exact
               path="/pokemons"
