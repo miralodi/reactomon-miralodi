@@ -1,23 +1,38 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Pokemon from "./Pokemon";
-import axios from "axios";
 
-class PokemonList extends Component {
-  state = {
-    pokemons: []
-  };
+const PokemonList = props => {
+  const [pokemons, setPokemons] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  componentDidMount() {
-    axios
-      .get("https://pokeapi.co/api/v2/pokemon?offset=0&limit=20")
-      .then(res => this.setState({ pokemons: res.data.results }));
-  }
+  useEffect(() => {
+    setIsLoading(true);
+    fetch("https://pokeapi.co/api/v2/pokemon?offset=0&limit=20")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch.");
+        }
+        setIsLoading(false);
+        return response.json();
+      })
+      .then(res => {
+        setPokemons(res.results);
+      })
+      .catch(err => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  }, []);
 
-  render() {
-    return this.state.pokemons.map(pokemon => (
+  let content = <p>Loading pokemons...</p>;
+
+  if (!isLoading && pokemons) {
+    content = pokemons.map(pokemon => (
       <Pokemon key={pokemon.name} pokemon={pokemon} />
     ));
   }
-}
+
+  return content;
+};
 
 export default PokemonList;
