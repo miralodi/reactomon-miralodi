@@ -1,5 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import styled from "styled-components";
 import { useHttp } from "./hooks/http";
+import { Button, ListGroup } from "react-bootstrap";
+
+const Header = styled.header`
+  text-transform: capitalize;
+  color: "tial";
+  text-align: left;
+  font-size: 3rem;
+  padding: 10px;
+`;
+
+const Img = styled.img`
+  text-align: left;
+  padding: 10px;
+  width: 500px;
+`;
+
+const Table = styled.table`
+  text-align: left;
+  padding: 10px;
+  width: 70%;
+`;
 
 const PokemonDetail = props => {
   const [isLoading, fetchedData] = useHttp(
@@ -12,29 +34,47 @@ const PokemonDetail = props => {
   if (!isLoading && fetchedData) {
     content = (
       <div>
-        <h1>{fetchedData.name}</h1>
-        <p>Height: {fetchedData.height}</p>
-        <p>Weight: {fetchedData.weight}</p>
-        <h1>Types: </h1>
-        <div>
+        <Header>{fetchedData.name}</Header>
+        <div style={{ textAlign: "left", padding: "7px" }}>
           {fetchedData.types.map(type => (
-            <li key={type.type.name}>{type.type.name}</li>
+            <Button
+              variant="outline-success"
+              style={{ width: "200px", textAlign: "center" }}
+            >
+              {type.type.name}
+            </Button>
           ))}
         </div>
-        <h1>Stats: </h1>
-        <div>
-          {fetchedData.stats.map(stat => (
-            <li key={stat.stat.name}>
-              {stat.stat.name}: {stat.base_stat}
-            </li>
-          ))}
-        </div>
-        <h1>Abilities: </h1>
-        <div>
-          {fetchedData.abilities.map(ability => (
-            <li key={ability.ability.name}>{ability.ability.name}</li>
-          ))}
-        </div>
+
+        <Table>
+          <tr>
+            <td>
+              <div>
+                <Img src={fetchedData.sprites.front_default} />
+              </div>
+              <div>
+                <h1>Stats: </h1>
+                <ListGroup>
+                  {fetchedData.stats.map(stat => (
+                    <ListGroup.Item key={stat.stat.name}>
+                      {stat.stat.name}: {stat.base_stat}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </div>
+              <div>
+                <h1>Abilities: </h1>
+                <ListGroup>
+                  {fetchedData.abilities.map(ability => (
+                    <ListGroup.Item key={ability.ability.name}>
+                      {ability.ability.name}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </div>
+            </td>
+          </tr>
+        </Table>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHttp } from "./hooks/http";
 
@@ -12,15 +12,17 @@ const Pokemon = props => {
   if (!isLoading && fetchedData) {
     content = (
       <span style={{ display: "inline-block", padding: "20px" }}>
-        <Card style={{ width: "18rem" }}>
-          <Card.Img
-            variant="top"
-            src={fetchedData.sprites.front_default}
-          />
+        <Card style={{ width: "15rem" }}>
+          <Card.Img variant="top" src={fetchedData.sprites.front_default} />
           <Card.Body>
             <Card.Title>
               <Link to={`/pokemon/${fetchedData.id}`}>
-                {props.pokemon.name}
+                <Button
+                  variant="outline-success"
+                  style={{ width: "200px", textAlign: "center" }}
+                >
+                  {props.pokemon.name}
+                </Button>
               </Link>
             </Card.Title>
           </Card.Body>

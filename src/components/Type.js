@@ -4,9 +4,9 @@ import { Button } from "react-bootstrap";
 
 const Type = props => {
   return (
-    <div style={{ padding: "10px" }}>
+    <div style={{ padding: "10px 50px", display: "inline-block" }}>
       <Button
-        variant="outline-secondary"
+        variant="outline-success"
         style={{ width: "200px", textAlign: "center" }}
       >
         {props.type.name}

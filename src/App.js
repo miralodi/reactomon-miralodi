@@ -8,13 +8,11 @@ import PokemonDetail from "./components/PokemonDetail";
 const App = props => {
   let content = (
     <Router>
-      <div className="App">
-        <div className="container">
-          <Navbar />
-          <Route exact path="/pokemons" component={PokemonList} />
-          <Route exact path="/types" component={TypeList} />
-          <Route path="/pokemon/:id" component={PokemonDetail} />
-        </div>
+      <div className="App" style={{ textAlign: "center" }}>
+        <Navbar />
+        <Route exact path="/pokemons" component={PokemonList} />
+        <Route exact path="/types" component={TypeList} />
+        <Route path="/pokemon/:id" component={PokemonDetail} />
       </div>
     </Router>
   );
