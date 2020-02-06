@@ -1,33 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Pokemon from "./Pokemon";
+import { useHttp } from './hooks/http';
 
 const PokemonList = props => {
-  const [pokemons, setPokemons] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetch("https://pokeapi.co/api/v2/pokemon?offset=0&limit=20")
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch.");
-        }
-        setIsLoading(false);
-        return response.json();
-      })
-      .then(res => {
-        setPokemons(res.results);
-      })
-      .catch(err => {
-        console.log(err);
-        setIsLoading(false);
-      });
-  }, []);
+  const [isLoading, fetchedData] = useHttp('https://pokeapi.co/api/v2/pokemon?offset=0&limit=20', []);
 
   let content = <p>Loading pokemons...</p>;
 
-  if (!isLoading && pokemons) {
-    content = pokemons.map(pokemon => (
+  if (!isLoading && fetchedData) {
+    content = fetchedData.results.map(pokemon => (
       <Pokemon key={pokemon.name} pokemon={pokemon} />
     ));
   }
