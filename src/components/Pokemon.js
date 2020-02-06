@@ -1,41 +1,52 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Card } from "react-bootstrap";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
-export class Pokemon extends Component {
-  state = {
-    imgUrl: "",
-    id: 0
-  };
+const Pokemon = props => {
+  const [imgUrl, setImgUrl] = useState([]);
+  const [id, setId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  componentDidMount() {
-    axios.get(this.props.pokemon.url).then(res =>
-      this.setState({
-        imgUrl: res.data.sprites.front_default,
-        id: res.data.id
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(props.pokemon.url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch.");
+        }
+        setIsLoading(false);
+        return response.json();
       })
-    );
-  }
+      .then(res => {
+        setImgUrl(res.sprites.front_default);
+        setId(res.id);
+      })
+      .catch(err => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  }, []);
 
-  render() {
-    return (
+  let content = <p>Loading pokemons...</p>;
+
+  if (!isLoading && imgUrl) {
+    content = (
       <span style={{ display: "inline-block", padding: "20px" }}>
         <Card style={{ width: "18rem" }}>
-          <Card.Img variant="top" src={this.state.imgUrl} />
+          <Card.Img variant="top" src={imgUrl} />
           <Card.Body>
             <Card.Title>
-              <Link to={`/pokemon/${this.state.id}`}>
-                {this.props.pokemon.name}
-              </Link>
+              <Link to={`/pokemon/${id}`}>{props.pokemon.name}</Link>
             </Card.Title>
           </Card.Body>
         </Card>
       </span>
     );
   }
-}
+
+  return content;
+};
 
 // PropTypes
 Pokemon.propTypes = {
