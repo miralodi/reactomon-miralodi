@@ -1,17 +1,21 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import Type from "./Type";
+import axios from "axios";
 
 class TypeList extends Component {
+  state = {
+    types: []
+  };
+
+  componentDidMount() {
+    axios
+      .get("https://pokeapi.co/api/v2/type")
+      .then(res => this.setState({ types: res.data.results }));
+  }
+
   render() {
-    console.log(this.props.types);
-    return this.props.types.map(type => <Type key={type.name} type={type} />);
+    return this.state.types.map(type => <Type key={type.name} type={type} />);
   }
 }
-
-// PropTypes
-TypeList.propTypes = {
-  types: PropTypes.array.isRequired
-};
 
 export default TypeList;
