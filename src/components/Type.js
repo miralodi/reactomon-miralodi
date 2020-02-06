@@ -1,21 +1,19 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "react-bootstrap";
 
-export class Type extends Component {
-  render() {
-    return (
-      <div style={{ padding: "10px" }}>
-        <Button
-          variant="outline-secondary"
-          style={{ width: "200px", textAlign: "center" }}
-        >
-          {this.props.type.name}
-        </Button>
-      </div>
-    );
-  }
-}
+const Type = props => {
+  return (
+    <div style={{ padding: "10px" }}>
+      <Button
+        variant="outline-secondary"
+        style={{ width: "200px", textAlign: "center" }}
+      >
+        {props.type.name}
+      </Button>
+    </div>
+  );
+};
 
 // PropTypes
 Type.propTypes = {
