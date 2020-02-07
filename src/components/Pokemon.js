@@ -1,24 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHttp } from "./hooks/http";
+import ThemeContext from "./context/ThemeContext";
+import AppTheme from "./layout/AppTheme";
 
 const Pokemon = props => {
   const [isLoading, fetchedData] = useHttp(props.pokemon.url, []);
+  const theme = useContext(ThemeContext)[0];
+  const currentTheme = AppTheme[theme];
 
   let content = <p>Loading pokemons...</p>;
 
   if (!isLoading && fetchedData) {
     content = (
-      <span style={{ display: "inline-block", padding: "20px" }}>
+      <span
+        style={{
+          display: "inline-block",
+          padding: "20px",
+          color: `${currentTheme.textColor}`
+        }}
+      >
         <Card style={{ width: "15rem" }}>
-          <Card.Img variant="top" src={fetchedData.sprites.front_default} />
+          <Card.Img variant="top" style={{ filter: `${currentTheme.filter}`}} src={fetchedData.sprites.front_default} />
           <Card.Body>
             <Card.Title>
               <Link to={`/pokemon/${fetchedData.id}`}>
                 <Button
-                  variant="outline-success"
+                  variant={currentTheme.variant}
                   style={{ width: "200px", textAlign: "center" }}
                 >
                   {props.pokemon.name}

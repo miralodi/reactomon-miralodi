@@ -1,32 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-const Header = styled.header`
-  background: #333;
-  color: #fff;
-  text-align: center;
-  padding: 10px
-`;
+import ThemeToggler from "./ThemeToggler";
+import ThemeContext from "../context/ThemeContext";
+import AppTheme from "./AppTheme";
 
 function Navbar() {
+  const theme = useContext(ThemeContext)[0];
+  const currentTheme = AppTheme[theme];
+
+  const Header = styled.header`
+    text-align: center;
+    padding: 10px;
+    background-color: ${currentTheme.backgroundColor};
+    color: ${currentTheme.textColor};
+  `;
+
+  const StyledLink = styled(Link)`
+    color: ${currentTheme.textColor};
+    font-weight: bold;
+  `;
+
   return (
     <Header>
       <h1>Pokemon</h1>
-      <Link style={linkStyle} to="/pokemons">
-        Pokemons
-      </Link>{" "}
-      |{" "}
-      <Link style={linkStyle} to="/types">
-        Types
-      </Link>
+      <StyledLink to="/pokemons">Pokemons</StyledLink> |{" "}
+      <StyledLink to="/types">Types</StyledLink>
+      <ThemeToggler />
     </Header>
   );
 }
-
-const linkStyle = {
-  color: "#fff",
-  textDecoration: "none"
-};
 
 export default Navbar;

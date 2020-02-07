@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import Type from "./Type";
 import { useHttp } from "./hooks/http";
+import ThemeContext from "./context/ThemeContext";
+import AppTheme from "./layout/AppTheme";
 
 const TypeList = props => {
-  const [isLoading, fetchedData] = useHttp(
-    "https://pokeapi.co/api/v2/type",
-    []
-  );
+  const [isLoading, data] = useHttp("https://pokeapi.co/api/v2/type", []);
+  const theme = useContext(ThemeContext)[0];
+  const currentTheme = AppTheme[theme];
 
   let content = <p>Loading types...</p>;
 
-  if (!isLoading && fetchedData) {
-    content = fetchedData.results.map(type => (
-      <Type key={type.name} type={type} />
+  if (!isLoading && data) {
+    content = data.results.map(type => (
+      <Type
+        style={{
+          backgroundColor: `${currentTheme.backgroundColor}`,
+          color: `${currentTheme.textColor}`
+        }}
+        key={type.name}
+        type={type}
+      />
     ));
   }
 
@@ -20,9 +28,3 @@ const TypeList = props => {
 };
 
 export default TypeList;
-
-// if (!isLoading && pokemons) {
-//   content = pokemons.map(pokemon => (
-//     <Pokemon key={pokemon.name} pokemon={pokemon} />
-//   ));
-// }
