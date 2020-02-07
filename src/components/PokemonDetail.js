@@ -1,80 +1,91 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { useHttp } from "./hooks/http";
-import { Button, ListGroup } from "react-bootstrap";
-
-const Header = styled.header`
-  text-transform: capitalize;
-  color: "tial";
-  text-align: left;
-  font-size: 3rem;
-  padding: 10px;
-`;
-
-const Img = styled.img`
-  text-align: left;
-  padding: 10px;
-  width: 500px;
-`;
-
-const Table = styled.table`
-  text-align: left;
-  padding: 10px;
-  width: 70%;
-`;
+import { Button, ListGroup, Table } from "react-bootstrap";
+import ThemeContext from "./context/ThemeContext";
+import AppTheme from "./layout/AppTheme";
 
 const PokemonDetail = props => {
-  const [isLoading, fetchedData] = useHttp(
+  const [isLoading, data] = useHttp(
     `https://pokeapi.co/api/v2/pokemon/${props.match.params.id}/`,
     []
   );
 
+  const theme = useContext(ThemeContext)[0];
+  const currentTheme = AppTheme[theme];
+
+  const Header = styled.header`
+    text-transform: capitalize;
+    background-color: "#fff";
+    color: ${currentTheme.backgroundColor};
+    text-align: left;
+    font-size: 3rem;
+    padding: 10px;
+  `;
+
+  const Img = styled.img`
+    width: 400px;
+    filter: ${currentTheme.filter};
+  `;
+
   let content = <p>Loading data...</p>;
 
-  if (!isLoading && fetchedData) {
+  if (!isLoading && data) {
     content = (
       <div>
-        <Header>{fetchedData.name}</Header>
+        <Header>{data.name}</Header>
         <div style={{ textAlign: "left", padding: "7px" }}>
-          {fetchedData.types.map(type => (
+          {data.types.map(type => (
             <Button
-              variant="outline-success"
-              style={{ width: "200px", textAlign: "center" }}
+              variant={currentTheme.variant}
+              style={{
+                width: "200px",
+                textAlign: "center",
+                padding: "10px",
+                marginRight: "10px",
+                marginBottom: "10px"
+              }}
             >
               {type.type.name}
             </Button>
           ))}
-        </div>
 
-        <Table>
-          <tr>
-            <td>
-              <div>
-                <Img src={fetchedData.sprites.front_default} />
-              </div>
-              <div>
-                <h1>Stats: </h1>
-                <ListGroup>
-                  {fetchedData.stats.map(stat => (
-                    <ListGroup.Item key={stat.stat.name}>
-                      {stat.stat.name}: {stat.base_stat}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              </div>
-              <div>
-                <h1>Abilities: </h1>
-                <ListGroup>
-                  {fetchedData.abilities.map(ability => (
-                    <ListGroup.Item key={ability.ability.name}>
-                      {ability.ability.name}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              </div>
-            </td>
-          </tr>
-        </Table>
+          <Table striped bordered responsive variant={currentTheme.variant}>
+            <thead>
+              <tr>
+                <th>Sprites</th>
+                <th>Stats</th>
+                <th>Abilities</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ textAlign: "center", padding: "0" }}>
+                  <Img src={data.sprites.front_default} />
+                  <Img src={data.sprites.front_shiny} />
+                </td>
+                <td>
+                  <ListGroup>
+                    {data.stats.map(stat => (
+                      <ListGroup.Item key={stat.stat.name}>
+                        {stat.stat.name}: {stat.base_stat}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </td>
+                <td>
+                  <ListGroup>
+                    {data.abilities.map(ability => (
+                      <ListGroup.Item key={ability.ability.name}>
+                        {ability.ability.name}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
       </div>
     );
   }
