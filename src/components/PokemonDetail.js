@@ -4,6 +4,7 @@ import { useHttp } from "./hooks/http";
 import { Button, ListGroup, Table } from "react-bootstrap";
 import ThemeContext from "./context/ThemeContext";
 import AppTheme from "./layout/AppTheme";
+import CatchPokemonBtn from "./layout/CatchPokemonBtn";
 
 const PokemonDetail = props => {
   const [isLoading, data] = useHttp(
@@ -18,6 +19,7 @@ const PokemonDetail = props => {
     text-transform: capitalize;
     background-color: "#fff";
     color: ${currentTheme.backgroundColor};
+    display: inline-block;
     text-align: left;
     font-size: 3rem;
     padding: 10px;
@@ -33,8 +35,17 @@ const PokemonDetail = props => {
   if (!isLoading && data) {
     content = (
       <div>
-        <Header>{data.name}</Header>
-        <div style={{ textAlign: "left", padding: "7px" }}>
+        <div style={{ height: "91px", textAlign: "left" }}>
+          <Header>{data.name} </Header>
+          <CatchPokemonBtn
+            pokemon={{
+              name: data.name,
+              url: `https://pokeapi.co/api/v2/pokemon/${props.match.params.id}/`
+            }}
+            style={{ height: "91px", padding: "10px", display: "inline-block", float: "left" }}
+          />
+        </div>
+        <div style={{ textAlign: "left", padding: "10px" }}>
           {data.types.map(type => (
             <Button
               variant={currentTheme.variant}
@@ -54,8 +65,8 @@ const PokemonDetail = props => {
             <thead>
               <tr>
                 <th>Sprites</th>
-                <th>Stats</th>
                 <th>Abilities</th>
+                <th>Stats</th>
               </tr>
             </thead>
             <tbody>
@@ -66,18 +77,26 @@ const PokemonDetail = props => {
                 </td>
                 <td>
                   <ListGroup>
-                    {data.stats.map(stat => (
-                      <ListGroup.Item key={stat.stat.name}>
-                        {stat.stat.name}: {stat.base_stat}
+                    {data.abilities.map(ability => (
+                      <ListGroup.Item key={ability.ability.name}>
+                        <Button
+                          variant={currentTheme.variant}
+                          style={{
+                            width: "100%",
+                            textAlign: "center"
+                          }}
+                        >
+                          {ability.ability.name}
+                        </Button>
                       </ListGroup.Item>
                     ))}
                   </ListGroup>
                 </td>
                 <td>
                   <ListGroup>
-                    {data.abilities.map(ability => (
-                      <ListGroup.Item key={ability.ability.name}>
-                        {ability.ability.name}
+                    {data.stats.map(stat => (
+                      <ListGroup.Item key={stat.stat.name}>
+                        {stat.stat.name}: {stat.base_stat}
                       </ListGroup.Item>
                     ))}
                   </ListGroup>

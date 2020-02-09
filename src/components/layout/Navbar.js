@@ -25,7 +25,8 @@ function Navbar() {
     <Header>
       <h1>Pokemon</h1>
       <StyledLink to="/pokemons">Pokemons</StyledLink> |{" "}
-      <StyledLink to="/types">Types</StyledLink>
+      <StyledLink to="/types">Types</StyledLink> |{" "}
+      <StyledLink to="/catched-pokemons">Catched Pokemons</StyledLink>
       <ThemeToggler />
     </Header>
   );

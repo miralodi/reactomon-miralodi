@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useHttp } from "./hooks/http";
 import ThemeContext from "./context/ThemeContext";
 import AppTheme from "./layout/AppTheme";
+import CatchPokemonBtn from "./layout/CatchPokemonBtn";
 
 const Pokemon = props => {
   const [isLoading, fetchedData] = useHttp(props.pokemon.url, []);
@@ -23,9 +24,16 @@ const Pokemon = props => {
         }}
       >
         <Card style={{ width: "15rem" }}>
-          <Card.Img variant="top" style={{ filter: `${currentTheme.filter}`}} src={fetchedData.sprites.front_default} />
+          <Card.Img
+            variant="top"
+            style={{ filter: `${currentTheme.filter}` }}
+            src={fetchedData.sprites.front_default}
+          />
           <Card.Body>
-            <Card.Title>
+            <Card.Title style={{ textAlign: "left" }}>
+              <CatchPokemonBtn
+                pokemon={{name: props.pokemon.name, url: props.pokemon.url}}
+              />
               <Link to={`/pokemon/${fetchedData.id}`}>
                 <Button
                   variant={currentTheme.variant}
